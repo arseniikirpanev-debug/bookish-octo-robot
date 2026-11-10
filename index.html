@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"><title>Genshin</title>
+    <style>
+        body { background: #111424; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 90vh; }
+        .box { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 16px; text-align: center; width: 320px; box-shadow: 0 10px 30px #000; }
+        .btn { width: 100%; padding: 12px; margin: 5px 0; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
+        .farm { background: #252f52; color: #fff; }
+        .pull { background: #f3ca52; color: #000; }
+        .res { background: #000; min-height: 40px; margin: 15px 0; padding: 10px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .c5 { color: #f3ca52; font-weight: bold; }
+        .c4 { color: #a252f3; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>Молитва</h2>
+        <p>💎 Камни: <span id="pr">0</span> | ✨ Пити: <span id="pt">0</span>/90</p>
+        <button class="btn farm" onclick="add()">+1600 Примогемов</button>
+        <button class="btn pull" onclick="gacha(1)">1 Крутка</button>
+        <button class="btn pull" onclick="gacha(10)">10 Круток</button>
+        <div class="res" id="out">Крутите баннер!</div>
+    </div>
+    <script>
+        let pm = 0, p5 = 0, p4 = 0;
+        const pool5 = ["Нахида 🍀", "Ху Тао 🦋", "Райдэн ⚡", "Чжун Ли 🔶"];
+        const pool4 = ["Беннет 👍", "Син Цю 📖", "Фишль 🦅"];
+        
+        function add() { pm += 1600; document.getElementById('pr').innerText = pm; }
+        
+        function drop() {
+            p5++; p4++;
+            if (p5 >= 90 || Math.random() < 0.006) { p5 = 0; return { n: pool5[Math.floor(Math.random() * pool5.length)], c: 'c5' }; }
+            if (p4 >= 10 || Math.random() < 0.051) { p4 = 0; return { n: pool4[Math.floor(Math.random() * pool4.length)], c: 'c4' }; }
+            return { n: "3★ Оружие ⚔️", c: '' };
+        }
+        
+        function gacha(n) {
+            if (pm < n * 160) return;
+            pm -= n * 160; document.getElementById('pr').innerText = pm; document.getElementById('pt').innerText = p5;
+            let res = [];
+            for(let i=0; i<n; i++) res.push(drop());
+            let last = res[res.length - 1];
+            document.getElementById('out').innerHTML = `<span class="${last.c}">${n === 1 ? last.n : 'Крутка х10 завершена!'}</span>`;
+        }
+    </script>
+</body>
+  </html>
+  
